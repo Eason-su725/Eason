@@ -77,28 +77,28 @@
 
 <div id="secretPage">
     <div class="box">
-        <h1>🔐 多本秘密文件</h1>
-        <p>可以写很多篇，分开保存，随时切换看</p>
+        <h1>🔐 秘密文件空间</h1>
+        <p>可以创建多个文件，保存内容，随时打开查看</p>
         <br>
-        <select id="diarySelect" onchange="switchDiary()">
-            <option value="">请选择文件查看</option>
+        <select id="fileSelect" onchange="openFile()">
+            <option value="">请选择文件</option>
         </select>
         <br><br>
-        <button onclick="newDiary()">新建一篇文件</button>
+        <button onclick="newFile()">新建空白文件</button>
     </div>
 
     <div class="box">
-        <textarea id="diary" placeholder="在这里写你的文件"></textarea>
+        <textarea id="content" placeholder="在这里写文件内容"></textarea>
     </div>
 
     <div class="box">
-        <button onclick="saveCurrentDiary()">保存当前文件</button>
+        <button onclick="saveFile()">保存文件</button>
         <button onclick="backMain()">退出返回第一个网站</button>
     </div>
 </div>
 
 <script>
-let nowId = -1;
+let currentFileIndex = -1;
 
 function showPwd(){
     let i=document.getElementById("pwd");
@@ -110,8 +110,7 @@ function checkPwd(){
     if(p=="123456"){
         document.getElementById("mainPage").style.display="none";
         document.getElementById("secretPage").style.display="block";
-        // 关键：一进来立刻加载日记列表
-        loadDiaryList();
+        loadFileList();
     }else{
         alert("密码错误");
     }
@@ -123,47 +122,47 @@ function backMain(){
     document.getElementById("pwd").value="";
 }
 
-function loadDiaryList(){
-    let sel = document.getElementById("diarySelect");
-    sel.innerHTML = '<option value="">请选择日记查看</option>';
-    let list = JSON.parse(localStorage.getItem("diaryList") || "[]");
-    for(let i=0;i<list.length;i++){
+function loadFileList(){
+    let sel = document.getElementById("fileSelect");
+    sel.innerHTML = '<option value="">请选择文件</option>';
+    let files = JSON.parse(localStorage.getItem("myFiles") || "[]");
+    
+    for(let i=0;i<files.length;i++){
         let opt = document.createElement("option");
         opt.value = i;
-        opt.innerText = "秘密文件"+(i+1);
+        opt.innerText = "文件 " + (i+1);
         sel.appendChild(opt);
     }
 }
 
-function newDiary(){
-    document.getElementById("diary").value = "";
-    nowId = -1;
-    document.getElementById("diarySelect").value = "";
+function newFile(){
+    document.getElementById("content").value = "";
+    currentFileIndex = -1;
+    document.getElementById("fileSelect").value = "";
 }
 
-function switchDiary(){
-    let idx = document.getElementById("diarySelect").value;
-    if(idx === "") return;
-    nowId = parseInt(idx);
-    let list = JSON.parse(localStorage.getItem("diaryList") || "[]");
-    document.getElementById("diary").value = list[nowId];
+function openFile(){
+    let index = document.getElementById("fileSelect").value;
+    if(index === "") return;
+    currentFileIndex = parseInt(index);
+    let files = JSON.parse(localStorage.getItem("myFiles") || "[]");
+    document.getElementById("content").value = files[currentFileIndex];
 }
 
-function saveCurrentDiary(){
-    let txt = document.getElementById("diary").value;
-    let list = JSON.parse(localStorage.getItem("diaryList") || "[]");
-
-    if(nowId >= 0){
-        list[nowId] = txt;
+function saveFile(){
+    let text = document.getElementById("content").value;
+    let files = JSON.parse(localStorage.getItem("myFiles") || "[]");
+    
+    if(currentFileIndex >= 0){
+        files[currentFileIndex] = text;
     }else{
-        list.push(txt);
-        nowId = list.length - 1;
+        files.push(text);
+        currentFileIndex = files.length - 1;
     }
-
-    localStorage.setItem("diaryList",JSON.stringify(list));
-    // 保存完立刻刷新下拉列表
-    loadDiaryList();
-    alert("保存成功！");
+    
+    localStorage.setItem("myFiles", JSON.stringify(files));
+    loadFileList();
+    alert("文件保存成功！");
 }
 </script>
 
