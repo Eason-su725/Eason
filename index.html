@@ -77,22 +77,22 @@
 
 <div id="secretPage">
     <div class="box">
-        <h1>🔐 多本秘密日记</h1>
+        <h1>🔐 多本秘密文件</h1>
         <p>可以写很多篇，分开保存，随时切换看</p>
         <br>
         <select id="diarySelect" onchange="switchDiary()">
-            <option value="">请选择日记查看</option>
+            <option value="">请选择文件查看</option>
         </select>
         <br><br>
-        <button onclick="newDiary()">新建一篇日记</button>
+        <button onclick="newDiary()">新建一篇文件</button>
     </div>
 
     <div class="box">
-        <textarea id="diary" placeholder="在这里写你的秘密日记"></textarea>
+        <textarea id="diary" placeholder="在这里写你的文件"></textarea>
     </div>
 
     <div class="box">
-        <button onclick="saveCurrentDiary()">保存当前日记</button>
+        <button onclick="saveCurrentDiary()">保存当前文件</button>
         <button onclick="backMain()">退出返回第一个网站</button>
     </div>
 </div>
@@ -130,7 +130,7 @@ function loadDiaryList(){
     for(let i=0;i<list.length;i++){
         let opt = document.createElement("option");
         opt.value = i;
-        opt.innerText = "秘密日记"+(i+1);
+        opt.innerText = "秘密文件"+(i+1);
         sel.appendChild(opt);
     }
 }
